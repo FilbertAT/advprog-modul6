@@ -7,6 +7,7 @@
  1. [Commit 1 Reflection](##commit-1-reflection)
  2. [Commit 2 Reflection](##commit-2-reflection)
  3. [Commit 3 Reflection](##commit-3-reflection)
+ 4. [Commit 4 Reflection](##commit-4-reflection)
  
  ---
 
@@ -72,3 +73,18 @@
  This update improves the server’s compliance with HTTP standards while maintaining clean and efficient routing logic using Rust’s pattern matching capabilities.
 
  ![Commit 3 screen capture](/assets/images/commit3.png)
+
+ ---
+
+ ## Commit 4 Reflection
+
+ In this commit, I tested the limitations of a **single-threaded server**, revealing a significant performance bottleneck.  
+
+ 1. **Blocking Behavior**
+ The server processes requests sequentially, meaning one slow request (like `/sleep`, which delays for 10 seconds) blocks all others.  
+ 2. **Request Queuing**
+ Even a simple request to `/` gets stuck behind a long-running one, demonstrating poor scalability.  
+ 3. **Real-World Impact**
+ In a production setting, this would degrade user experience, as one slow request could delay all others.  
+
+ This test highlights the need for **multithreading**, which will allow the server to handle multiple requests concurrently, preventing delays caused by long-running tasks.
