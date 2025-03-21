@@ -6,6 +6,7 @@
  
  1. [Commit 1 Reflection](##commit-1-reflection)
  2. [Commit 2 Reflection](##commit-2-reflection)
+ 3. [Commit 3 Reflection](##commit-3-reflection)
  
  ---
 
@@ -26,8 +27,7 @@
  ## Commit 2 Reflection
  In this commit, I improved the server to serve actual HTML content instead of merely logging requests. This marks a significant step toward building a functional web server.
  
- ### Enhancements:
- 
+ ### Changes:
  1. **File System Integration**  
     Introduced the `fs` module to read HTML content from the file system using `fs::read_to_string()`.
    
@@ -48,3 +48,27 @@
  ![Commit 2 screen capture](/assets/images/commit2.png)
  
  ---
+
+ ## Commit 3 Reflection
+ In this commit, I implemented basic routing functionality, allowing the server to return different responses based on the requested URL path. This is an important improvement, making the server behave more like a real-world web server.
+
+ ### Changes:
+ 1. **Request Path Handling**  
+ Implemented logic to extract the request path from the HTTP request line to determine which content to serve.
+ **Splitting Responses Based on the Requested Path**  
+   - If the request is for the root path (`"/"`), the server serves `hello.html` with a `200 OK` status.  
+   - If the request is for any other path, the server serves `404.html` with a `404 Not Found` status.  
+   - This separation ensures that the server properly distinguishes between valid and invalid routes.
+
+ 2. **Error Handling for Invalid Requests**  
+ Created a dedicated `404.html` file to improve the user experience when clients request non-existent resources.
+
+ 3. **Refactoring for Maintainability**  
+   - Initially, response handling involved repetitive logic for determining status codes, reading files, and formatting responses.  
+   - To improve this, I refactored the code using a **tuple** to store both the status line and filename before processing the response.  
+   - This refactoring reduces redundancy, ensuring that response processing is handled in a single step instead of duplicating logic for different cases.  
+   - By making the response handling modular, it becomes easier to extend the server to handle additional routes in the future.
+
+ This update improves the server’s compliance with HTTP standards while maintaining clean and efficient routing logic using Rust’s pattern matching capabilities.
+
+ ![Commit 3 screen capture](/assets/images/commit3.png)
