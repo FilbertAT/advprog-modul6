@@ -4,11 +4,12 @@
  ---
  ## Contents
  
- 1. [Commit 1 Reflection](##commit-1-reflection)
- 2. [Commit 2 Reflection](##commit-2-reflection)
- 3. [Commit 3 Reflection](##commit-3-reflection)
- 4. [Commit 4 Reflection](##commit-4-reflection)
- 5. [Commit 5 Reflection](##commit-5-reflection)
+ [Commit 1 Reflection](#commit-1-reflection) <br>
+ [Commit 2 Reflection](#commit-2-reflection) <br>
+ [Commit 3 Reflection](#commit-3-reflection) <br>
+ [Commit 4 Reflection](#commit-4-reflection) <br>
+ [Commit 5 Reflection](#commit-5-reflection) <br>
+ [Commit Bonus Reflection](#commit-bonus-reflection) <br>
  
  ---
 
@@ -90,3 +91,8 @@
  ![Commit 5 screen capture](/assets/images/commit5.png)
 
  As the image shown, multiple worker threads (Worker 0, Worker 1, Worker 2, Worker 3) are processing jobs concurrently. Each worker logs when it receives a job and starts executing it. The fact that multiple workers are executing jobs at the same time demonstrates that the ThreadPool successfully distributes tasks among available worker threads, preventing blocking.
+
+ ## Commit Bonus Reflection
+ The `build` function enhances thread pool creation by returning a `Result`, ensuring structured error handling. Instead of panicking on invalid input (e.g., zero-sized pools), it returns a `PoolCreationError`, allowing the caller to handle failures gracefully. This approach improves robustness, aligns with Rust’s best practices, and facilitates future error-handling extensions without breaking existing functionality. Compared to `new`, which may panic or use `Option<ThreadPool>`, `build` ensures safer and more predictable execution.
+
+ 
