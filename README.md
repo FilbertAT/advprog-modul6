@@ -8,6 +8,7 @@
  2. [Commit 2 Reflection](##commit-2-reflection)
  3. [Commit 3 Reflection](##commit-3-reflection)
  4. [Commit 4 Reflection](##commit-4-reflection)
+ 5. [Commit 5 Reflection](##commit-5-reflection)
  
  ---
 
@@ -47,8 +48,6 @@
  This update introduces the basics of serving static files and highlights the importance of correctly formatting HTTP responses for proper client compatibility. It also demonstrates how Rust’s standard library enables web server functionality without external dependencies.
 
  ![Commit 2 screen capture](/assets/images/commit2.png)
- 
- ---
 
  ## Commit 3 Reflection
  In this commit, I implemented basic routing functionality, allowing the server to return different responses based on the requested URL path. This is an important improvement, making the server behave more like a real-world web server.
@@ -74,17 +73,20 @@
 
  ![Commit 3 screen capture](/assets/images/commit3.png)
 
- ---
-
  ## Commit 4 Reflection
 
- In this commit, I tested the limitations of a **single-threaded server**, revealing a significant performance bottleneck.  
+ The updated `handle_connection` function introduces a 10-second delay for requests to `/sleep` using `thread::sleep(Duration::from_secs(10))`. When testing by opening `127.0.0.1:7878/sleep` in one tab and `127.0.0.1:7878` in another, both requests experienced delays. To rule out device lag, I tested `127.0.0.1:7878` alone, and it loaded instantly.
 
- 1. **Blocking Behavior**
- The server processes requests sequentially, meaning one slow request (like `/sleep`, which delays for 10 seconds) blocks all others.  
- 2. **Request Queuing**
- Even a simple request to `/` gets stuck behind a long-running one, demonstrating poor scalability.  
- 3. **Real-World Impact**
- In a production setting, this would degrade user experience, as one slow request could delay all others.  
+ This issue arises because the server processes requests sequentially in a single thread. While handling the `/sleep` request, it becomes blocked, preventing other incoming requests from being served until the delay ends. This highlights a key limitation of a single-threaded server—a slow request holds up all others, significantly affecting performance, especially in a real-world scenario with multiple users.
 
- This test highlights the need for **multithreading**, which will allow the server to handle multiple requests concurrently, preventing delays caused by long-running tasks.
+ A potential solution is multithreading, allowing the server to handle multiple requests concurrently, preventing a single long-running request from delaying the rest. This will be addressed in the next update.
+
+ ## Commit 5 Reflection
+
+ ​In this phase, I enhanced the server's performance by implementing a thread pool, enabling it to handle multiple requests concurrently (at the same time) rather than sequentially. This approach involves maintaining a fixed number of worker threads that await tasks in a queue. Upon receiving a new request, it's assigned to an available worker thread, preventing the main thread from being blocked. This design ensures that slow requests don't delay others, thereby improving performance under heavy load. Each worker thread continuously picks up tasks, executes them, and then waits for the next task, reducing the overhead associated with constantly creating and destroying threads while keeping the server responsive.
+
+ Maybe this illustration can explain it a little bit more.
+
+ ![Commit 5 screen capture](/assets/images/commit5.png)
+
+ As the image shown, multiple worker threads (Worker 0, Worker 1, Worker 2, Worker 3) are processing jobs concurrently. Each worker logs when it receives a job and starts executing it. The fact that multiple workers are executing jobs at the same time demonstrates that the ThreadPool successfully distributes tasks among available worker threads, preventing blocking.
